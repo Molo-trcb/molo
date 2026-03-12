@@ -27,6 +27,10 @@ export function trashPath(): string {
   return "/trash";
 }
 
+export function selfDestructionPath(): string {
+  return "/self-destruction";
+}
+
 export function debugPath(): string {
   return "/debug";
 }

@@ -122,7 +122,7 @@ export class PluginManager {
     const rootDir = env.ENVIRONMENT === "test" ? "" : "build";
 
     glob
-      .sync(path.join(rootDir, "plugins/*/server/!(*.test|schema).[jt]s"))
+      .sync(`${rootDir}/plugins/*/server/!(*.test|schema).[jt]s`)
       .forEach((filePath: string) => {
         require(path.join(process.cwd(), filePath));
       });

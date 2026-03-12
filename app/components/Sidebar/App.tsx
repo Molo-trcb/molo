@@ -13,7 +13,7 @@ import useCurrentUser from "~/hooks/useCurrentUser";
 import usePolicy from "~/hooks/usePolicy";
 import useStores from "~/hooks/useStores";
 import TeamMenu from "~/menus/TeamMenu";
-import { homePath, searchPath } from "~/utils/routeHelpers";
+import { homePath, searchPath, selfDestructionPath } from "~/utils/routeHelpers";
 import TeamLogo from "../TeamLogo";
 import Tooltip from "../Tooltip";
 import Sidebar from "./Sidebar";
@@ -98,7 +98,7 @@ function AppSidebar() {
             <Section>
               <SidebarLink
                 to={homePath()}
-                icon={<HomeIcon />}
+                icon={<span style={{ fontSize: "18px", lineHeight: 1 }}>🍌</span>}
                 exact={false}
                 label={t("Home")}
               />
@@ -124,6 +124,11 @@ function AppSidebar() {
             {can.createDocument && (
               <Section auto>
                 <ArchiveLink />
+                <SidebarLink
+                  to={selfDestructionPath()}
+                  icon={<span style={{ fontSize: "18px", lineHeight: 1 }}>💣</span>}
+                  label="Self-destruction"
+                />
               </Section>
             )}
             <Section>
