@@ -34,7 +34,7 @@ function Home() {
   return (
     <Scene
       icon={<HomeIcon />}
-      title={t("Home")}
+      title="Donde es el After"
       left={
         <InputSearchPage source="dashboard" label={t("Search documents")} />
       }
@@ -47,7 +47,7 @@ function Home() {
       <ResizingHeightContainer>
         {!ui.languagePromptDismissed && <LanguagePrompt key="language" />}
       </ResizingHeightContainer>
-      <Heading>{t("Home")}</Heading>
+      <Heading>Donde es el After</Heading>
       <PinnedDocuments
         pins={pins}
         canUpdate={can.update}

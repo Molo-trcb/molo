@@ -100,7 +100,7 @@ function AppSidebar() {
                 to={homePath()}
                 icon={<span style={{ fontSize: "18px", lineHeight: 1 }}>🍌</span>}
                 exact={false}
-                label={t("Home")}
+                label="Donde es el After"
               />
               <SidebarLink
                 to={searchPath()}
