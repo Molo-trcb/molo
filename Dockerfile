@@ -27,6 +27,8 @@ RUN addgroup --gid 1001 nodejs && \
     chown -R nodejs:nodejs /var/lib/outline && \
     chown -R nodejs:nodejs /opt/outline
 
+RUN corepack enable
+
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/build ./build
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/server ./server
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/public ./public
