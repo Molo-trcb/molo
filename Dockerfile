@@ -45,4 +45,4 @@ USER nodejs
 HEALTHCHECK --interval=1m CMD wget -qO- "http://localhost:${PORT:-3000}/_health" | grep -q "OK" || exit 1
 
 EXPOSE 3000
-CMD ["node", "build/server/index.js", "--services=web,websockets,worker,cron"]
+CMD ["node", "build/server/index.js", "--services=web,websockets,collaboration,worker,cron"]
