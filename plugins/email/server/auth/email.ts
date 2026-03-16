@@ -27,6 +27,18 @@ router.post(
   async (ctx: APIContext<T.EmailReq>) => {
     const { email, client, preferOTP } = ctx.input.body;
 
+    // Check email whitelist if configured
+    const allowedEmails = process.env.ALLOWED_EMAILS;
+    if (allowedEmails) {
+      const allowedList = allowedEmails
+        .split(",")
+        .map((e) => e.trim().toLowerCase());
+      if (!allowedList.includes(email.toLowerCase())) {
+        ctx.body = { success: true };
+        return;
+      }
+    }
+
     const domain = parseDomain(ctx.request.hostname);
 
     let team: Team | null | undefined;
