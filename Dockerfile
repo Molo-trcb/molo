@@ -27,14 +27,14 @@ RUN addgroup --gid 1001 nodejs && \
     chown -R nodejs:nodejs /var/lib/outline && \
     chown -R nodejs:nodejs /opt/outline
 
-RUN corepack enable
-
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/build ./build
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/server ./server
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/public ./public
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/.sequelizerc ./.sequelizerc
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/node_modules ./node_modules
 COPY --from=builder --chown=nodejs:nodejs /opt/outline/package.json ./package.json
+COPY --from=builder --chown=nodejs:nodejs /opt/outline/yarn.lock ./yarn.lock
+COPY --from=builder --chown=nodejs:nodejs /opt/outline/.yarnrc.yml ./.yarnrc.yml
 
 ENV FILE_STORAGE_LOCAL_ROOT_DIR=/var/lib/outline/data
 RUN mkdir -p "$FILE_STORAGE_LOCAL_ROOT_DIR" && \
