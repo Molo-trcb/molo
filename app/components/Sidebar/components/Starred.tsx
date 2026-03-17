@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import styled from "styled-components";
 import type Star from "~/models/Star";
 import DelayedMount from "~/components/DelayedMount";
 import Flex from "~/components/Flex";
@@ -36,13 +37,9 @@ function Starred() {
     }
   }, [t, error]);
 
-  if (!stars.orderedData.length) {
-    return null;
-  }
-
   return (
     <Flex column>
-      <Header id="starred" title={t("Starred")}>
+      <Header id="starred" title="Favoritos">
         <Relative>
           {reorderStarProps.isDragging && (
             <DropCursor
@@ -57,6 +54,9 @@ function Starred() {
               innerRef={dropToStarRef}
               position="top"
             />
+          )}
+          {!loading && !stars.orderedData.length && (
+            <EmptyHint>Marca documentos con ⭐ para verlos aquí</EmptyHint>
           )}
           {stars.orderedData
             .slice(0, page * STARRED_PAGINATION_LIMIT)
@@ -83,5 +83,11 @@ function Starred() {
     </Flex>
   );
 }
+
+const EmptyHint = styled.p`
+  margin: 4px 0 4px 8px;
+  font-size: 13px;
+  color: ${(props) => props.theme.textTertiary};
+`;
 
 export default observer(Starred);
