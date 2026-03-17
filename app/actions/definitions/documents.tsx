@@ -1476,13 +1476,13 @@ export const generateTldr = createAction({
     const toastId = toast.loading("Generando TL;DR…");
 
     try {
-      const result = await client.post("/api/tldr.create", {
+      const result = await client.post("/tldr.create", {
         id: activeDocumentId,
       });
 
       const summary: string = result.data.summary;
 
-      await client.post("/api/documents.update", {
+      await client.post("/documents.update", {
         id: activeDocumentId,
         text: `:::info\n**TL;DR:** ${summary}\n:::\n`,
         editMode: "prepend",
