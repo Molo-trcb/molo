@@ -31,6 +31,7 @@ import {
   deleteDocument,
   leaveDocument,
   permanentlyDeleteDocument,
+  generateTldr,
 } from "~/actions/definitions/documents";
 import { ActiveDocumentSection } from "~/actions/sections";
 import useMobile from "./useMobile";
@@ -103,6 +104,7 @@ export function useDocumentMenuAction({
       createNewDocument,
       pinDocument,
       ActionSeparator,
+      generateTldr,
       openDocumentComments,
       openDocumentHistory,
       openDocumentInsights,
