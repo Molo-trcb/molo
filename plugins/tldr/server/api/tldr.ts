@@ -42,7 +42,9 @@ router.post("tldr.create", auth(), async (ctx: APIContext) => {
   });
 
   if (!response.ok) {
-    ctx.throw(502, "Error calling AI API");
+    const errorBody = await response.text();
+    console.error(`[tldr] OpenRouter error ${response.status}: ${errorBody}`);
+    ctx.throw(502, `Error calling AI API: ${response.status} ${errorBody}`);
   }
 
   const data = (await response.json()) as {
