@@ -1,0 +1,6 @@
+{
+  "id": "tldr",
+  "name": "TL;DR Generator",
+  "description": "Auto-generates a TL;DR summary for documents using Claude AI.",
+  "priority": 100
+}

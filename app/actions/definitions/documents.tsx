@@ -1456,6 +1456,49 @@ export const applyTemplateFactory = ({
     children: actions,
   });
 
+export const generateTldr = createAction({
+  name: () => "Generar TL;DR",
+  analyticsName: "Generate TL;DR",
+  section: ActiveDocumentSection,
+  icon: <span style={{ fontSize: "16px", lineHeight: 1 }}>✨</span>,
+  visible: ({ activeDocumentId, stores }) => {
+    if (!activeDocumentId) {
+      return false;
+    }
+    const document = stores.documents.get(activeDocumentId);
+    return !!document?.isActive && !!stores.policies.abilities(activeDocumentId).update;
+  },
+  perform: async ({ activeDocumentId, stores }) => {
+    if (!activeDocumentId) {
+      return;
+    }
+
+    const toastId = toast.loading("Generando TL;DR…");
+
+    try {
+      const result = await client.post("/api/tldr.create", {
+        id: activeDocumentId,
+      });
+
+      const summary: string = result.data.summary;
+
+      await client.post("/api/documents.update", {
+        id: activeDocumentId,
+        text: `:::info\n**TL;DR:** ${summary}\n:::\n`,
+        editMode: "prepend",
+      });
+
+      await stores.documents.fetch(activeDocumentId, { force: true });
+
+      toast.dismiss(toastId);
+      toast.success("TL;DR insertado al inicio del documento");
+    } catch (_err) {
+      toast.dismiss(toastId);
+      toast.error("Error al generar el TL;DR");
+    }
+  },
+});
+
 export const rootDocumentActions = [
   openDocument,
   archiveDocument,
@@ -1494,4 +1537,5 @@ export const rootDocumentActions = [
   openDocumentHistory,
   openDocumentInsights,
   shareDocument,
+  generateTldr,
 ];
