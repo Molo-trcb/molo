@@ -1,5 +1,6 @@
 import Router from "koa-router";
 import auth from "@server/middlewares/authentication";
+import Logger from "@server/logging/Logger";
 import { Document } from "@server/models";
 import { DocumentHelper } from "@server/models/helpers/DocumentHelper";
 import { authorize } from "@server/policies";
@@ -43,7 +44,7 @@ router.post("tldr.create", auth(), async (ctx: APIContext) => {
 
   if (!response.ok) {
     const errorBody = await response.text();
-    console.error(`[tldr] OpenRouter error ${response.status}: ${errorBody}`);
+    Logger.error("OpenRouter API error", new Error(errorBody), { status: response.status });
     ctx.throw(502, `Error calling AI API: ${response.status} ${errorBody}`);
   }
 
