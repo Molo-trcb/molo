@@ -69,6 +69,7 @@ export default function init(
   server.on(
     "upgrade",
     function (req: IncomingMessage, socket: Duplex, head: Buffer) {
+      Logger.info("multiplayer", `WebSocket upgrade request: ${req.url}`);
       if (req.url?.startsWith(path)) {
         // parse document id and close connection if not present in request
         const documentId = url
@@ -77,6 +78,7 @@ export default function init(
           .split("/")
           .pop();
 
+        Logger.info("multiplayer", `Collaboration upgrade: documentId=${documentId}`);
         if (documentId) {
           // Handle socket errors that may occur during upgrade (e.g., maxPayload exceeded)
           socket.on("error", (error: NodeJS.ErrnoException) => {
@@ -94,7 +96,9 @@ export default function init(
             );
           });
 
+          Logger.info("multiplayer", `Calling wss.handleUpgrade for ${documentId}`);
           wss.handleUpgrade(req, socket, head, (client) => {
+            Logger.info("multiplayer", `WebSocket upgrade complete for ${documentId}`);
             // Handle websocket connection errors as soon as the client is upgraded
             client.on("error", (error) => {
               Logger.error(
