@@ -22,7 +22,7 @@ router.post("tldr.create", auth(), async (ctx: APIContext) => {
     ctx.throw(500, "OPENROUTER_API_KEY not configured");
   }
 
-  const model = process.env.OPENROUTER_MODEL ?? "google/gemini-flash-1.5";
+  const model = process.env.OPENROUTER_MODEL ?? "google/gemini-2.0-flash-001";
 
   const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
