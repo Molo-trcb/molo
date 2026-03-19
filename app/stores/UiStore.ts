@@ -78,7 +78,7 @@ class UiStore {
   sidebarCollapsed = false;
 
   @observable
-  rightSidebar: "comments" | "history" | null = null;
+  rightSidebar: "comments" | "history" | "infographic" | null = null;
 
   @observable
   sidebarIsResizing = false;

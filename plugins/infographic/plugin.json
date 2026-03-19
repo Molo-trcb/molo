@@ -1,0 +1,6 @@
+{
+  "id": "infographic",
+  "name": "Infographic Generator",
+  "description": "Generates visual HTML infographics from documents using AI.",
+  "priority": 100
+}

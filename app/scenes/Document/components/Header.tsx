@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { TableOfContentsIcon, EditIcon } from "outline-icons";
+import { TableOfContentsIcon, EditIcon, GraphIcon } from "outline-icons";
 import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -336,6 +336,25 @@ function DocumentHeader({
                 >
                   {t("Publish")}…
                 </Button>
+              </Action>
+            )}
+            {!isDeleted && !isRevision && (
+              <Action>
+                <Tooltip content={t("Generate infographic")} placement="bottom">
+                  <Button
+                    icon={<GraphIcon />}
+                    onClick={() =>
+                      ui.set({
+                        rightSidebar:
+                          ui.rightSidebar === "infographic"
+                            ? null
+                            : "infographic",
+                      })
+                    }
+                    neutral
+                    borderOnHover
+                  />
+                </Tooltip>
               </Action>
             )}
             {!isDeleted && <Separator />}

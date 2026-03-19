@@ -24,6 +24,9 @@ const DocumentComments = lazyWithRetry(
 const DocumentHistory = lazyWithRetry(
   () => import("~/scenes/Document/components/History")
 );
+const DocumentInfographic = lazyWithRetry(
+  () => import("~/scenes/Document/components/InfographicPanel")
+);
 
 interface DocumentSidebarContentProps {
   skipInitialAnimation?: boolean;
@@ -52,6 +55,7 @@ const DocumentSidebarContent = observer(function DocumentSidebarContent({
       >
         {ui.rightSidebar === "comments" && <DocumentComments />}
         {ui.rightSidebar === "history" && <DocumentHistory />}
+        {ui.rightSidebar === "infographic" && <DocumentInfographic />}
       </React.Suspense>
     </Route>
   );
