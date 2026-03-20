@@ -18,7 +18,7 @@ function InfographicPanel() {
   const { t } = useTranslation();
   const match = useRouteMatch<{ documentSlug: string }>();
   const document = documents.get(match.params.documentSlug);
-  const { editor } = useDocumentContext();
+  const { editor, isEditorInitialized } = useDocumentContext();
 
   const [html, setHtml] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -48,8 +48,10 @@ function InfographicPanel() {
   }, [document, t]);
 
   React.useEffect(() => {
-    void generate();
-  }, [generate]);
+    if (isEditorInitialized) {
+      void generate();
+    }
+  }, [isEditorInitialized, generate]);
 
   const handleClose = React.useCallback(() => {
     ui.set({ rightSidebar: null });
