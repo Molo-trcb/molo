@@ -9,13 +9,16 @@ import type { APIContext } from "@server/types";
 const router = new Router();
 
 router.post("infographic.create", auth(), async (ctx: APIContext) => {
-  const { id } = ctx.request.body as { id: string };
+  const { id, text } = ctx.request.body as { id: string; text?: string };
   const { user } = ctx.state.auth;
 
   const document = await Document.findByPk(id, { userId: user.id });
   authorize(user, "read", document);
 
-  const markdown = await DocumentHelper.toMarkdown(document!);
+  // Prefer text sent from the client (live editor content) over DB-stored content
+  const markdown = text?.trim()
+    ? text
+    : await DocumentHelper.toMarkdown(document!);
 
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {

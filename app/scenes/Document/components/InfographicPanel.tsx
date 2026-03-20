@@ -5,6 +5,7 @@ import { useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import { s } from "@shared/styles";
 import Button from "~/components/Button";
+import { useDocumentContext } from "~/components/DocumentContext";
 import Empty from "~/components/Empty";
 import Flex from "~/components/Flex";
 import LoadingIndicator from "~/components/LoadingIndicator";
@@ -17,6 +18,7 @@ function InfographicPanel() {
   const { t } = useTranslation();
   const match = useRouteMatch<{ documentSlug: string }>();
   const document = documents.get(match.params.documentSlug);
+  const { editor } = useDocumentContext();
 
   const [html, setHtml] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -30,7 +32,11 @@ function InfographicPanel() {
     setError(null);
     setHtml(null);
     try {
-      const res = await client.post("/infographic.create", { id: document.id });
+      const text = editor ? (editor.value() as string) : undefined;
+      const res = await client.post("/infographic.create", {
+        id: document.id,
+        text,
+      });
       setHtml(res.data.html);
     } catch (err) {
       setError(
