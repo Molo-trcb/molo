@@ -15,7 +15,7 @@ router.post("tldr.create", auth(), async (ctx: APIContext) => {
   const document = await Document.findByPk(id, { userId: user.id });
   authorize(user, "read", document);
 
-  const markdown = DocumentHelper.toMarkdown(document!);
+  const markdown = await DocumentHelper.toMarkdown(document!);
 
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
