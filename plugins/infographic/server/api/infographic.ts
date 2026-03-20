@@ -38,17 +38,15 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
         messages: [
           {
             role: "user",
-            content: `You are an infographic designer. Create a self-contained HTML infographic that visually summarizes the EXACT content of the document below.
+            content: `You are an infographic designer. Your only job is to visually represent the document provided below.
 
-STRICT RULES:
-- The title, key points, and all text MUST come directly from the document content — do not invent generic content
-- Extract the real title, main topics, and 3-5 most important specific points from the document
-- Use only inline styles (no external CSS, no external fonts, no external resources)
-- Design: colorful cards or sections, rounded corners, modern typography using system fonts
-- The HTML must work inside an iframe with no external dependencies
-- Output ONLY raw HTML — no markdown, no code fences, no explanation
+CRITICAL RULES — follow every one exactly:
+1. LANGUAGE: Detect the language of the document and write ALL text in that same language. If the document is in Spanish, the infographic must be entirely in Spanish.
+2. CONTENT: Every word in the infographic must come from the document. The title must be the document's actual title. The key points must be the document's actual main ideas. Do NOT invent, translate to English, or use generic placeholder text.
+3. STYLE: Use only inline CSS styles. No external fonts, no external CSS, no CDN links. Use system fonts (Arial, sans-serif). Colorful cards, rounded corners.
+4. OUTPUT: Return raw HTML only. No markdown fences, no \`\`\`html, no explanation text before or after.
 
-DOCUMENT TO SUMMARIZE:
+DOCUMENT:
 ${markdown}`,
           },
         ],
