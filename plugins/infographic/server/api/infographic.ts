@@ -38,14 +38,17 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
         messages: [
           {
             role: "user",
-            content: `Create a self-contained HTML infographic for the following document. Requirements:
-- Use only inline styles (no external CSS, no external fonts, no external resources)
-- Include: a prominent title, 3-5 key points as visual cards or bullets, a clean modern design with colors
-- Make it visually appealing with background colors, rounded corners, and good typography
-- The HTML must render correctly inside an iframe without any external dependencies
-- Return ONLY the HTML code, nothing else, no markdown fences
+            content: `You are an infographic designer. Create a self-contained HTML infographic that visually summarizes the EXACT content of the document below.
 
-Document:
+STRICT RULES:
+- The title, key points, and all text MUST come directly from the document content — do not invent generic content
+- Extract the real title, main topics, and 3-5 most important specific points from the document
+- Use only inline styles (no external CSS, no external fonts, no external resources)
+- Design: colorful cards or sections, rounded corners, modern typography using system fonts
+- The HTML must work inside an iframe with no external dependencies
+- Output ONLY raw HTML — no markdown, no code fences, no explanation
+
+DOCUMENT TO SUMMARIZE:
 ${markdown}`,
           },
         ],
@@ -64,7 +67,9 @@ ${markdown}`,
   const data = (await response.json()) as {
     choices: { message: { content: string } }[];
   };
-  const html = data.choices[0].message.content.trim();
+  let html = data.choices[0].message.content.trim();
+  // Strip markdown code fences if the model wraps the output
+  html = html.replace(/^```html?\s*/i, "").replace(/\s*```$/, "");
 
   ctx.body = { data: { html } };
 });
