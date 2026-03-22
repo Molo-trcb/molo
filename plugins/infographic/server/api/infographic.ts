@@ -17,6 +17,8 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
 
   const markdown = await DocumentHelper.toMarkdown(document!);
 
+  Logger.info("infographic", `Document markdown length: ${markdown.length}, preview: ${markdown.slice(0, 200)}`);
+
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     ctx.throw(500, "OPENROUTER_API_KEY not configured");
@@ -38,19 +40,19 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
         messages: [
           {
             role: "user",
-            content: `You are an expert infographic designer. Transform the following document into a beautiful, detailed HTML infographic.
+            content: `You are an expert infographic designer. Your task is to convert the document below into a rich, detailed HTML infographic that faithfully represents the document's actual content.
 
-RULES:
-1. LANGUAGE: Write everything in the same language as the document. Never use English if the document is in another language.
-2. CONTENT: Base the infographic entirely on the document below. Use its actual title, its real section headings, and the specific ideas, facts, and conclusions it contains. Do not invent content, but you may synthesize and summarize what is written.
-3. STRUCTURE:
-   - A header with the document's title and a brief intro sentence summarizing the document
-   - 4 to 6 section cards, one per major topic in the document, each with: the topic title, 2-3 explanatory sentences, and 2-3 bullet points
-   - A final "Conclusiones clave" card (translated to the document's language) with 3 takeaways from the document
-4. STYLE: Inline CSS only. No external resources. System fonts (Arial, sans-serif). Colorful section headers, light card backgrounds, colored left borders or rounded corners, subtle box-shadows. Dense and informative layout.
-5. OUTPUT: Return only raw HTML. No markdown fences, no \`\`\`html, no extra text.
+STRICT RULES:
+1. LANGUAGE: Use the exact same language as the document throughout. If the document is in Spanish, all text must be in Spanish.
+2. STRUCTURE: Create one section card for each major section or heading found in the document. Use the document's exact heading text as the card title — do not rename or merge sections. Include specific details, phrases, and bullet points taken directly from each section.
+3. LAYOUT:
+   - A prominent header showing the document's actual title and a one-sentence summary of the whole document
+   - One card per document section (preserve the document's order), each containing: exact section title, 2-3 sentences from that section, and 2-3 of its bullet points
+   - A final conclusions card in the document's language summarizing the main takeaways
+4. STYLE: Inline CSS only. No external resources. System fonts (Arial, sans-serif). Each card has a colored header bar, white background, left border accent, rounded corners, box-shadow. Use a rich consistent color palette.
+5. OUTPUT: Return only the raw HTML. No markdown, no \`\`\`html, no explanatory text outside the HTML.
 
-DOCUMENT:
+DOCUMENT TO CONVERT:
 ${markdown}`,
           },
         ],
