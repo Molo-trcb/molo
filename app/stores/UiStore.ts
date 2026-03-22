@@ -34,6 +34,7 @@ type PersistedData = Pick<
   | "sidebarRightWidth"
   | "sidebarCollapsed"
   | "tocVisible"
+  | "infographicStyle"
 >;
 
 class UiStore {
@@ -81,6 +82,9 @@ class UiStore {
   rightSidebar: "comments" | "history" | "infographic" | null = null;
 
   @observable
+  infographicStyle = "modern";
+
+  @observable
   sidebarIsResizing = false;
 
   @observable
@@ -112,6 +116,7 @@ class UiStore {
       data.sidebarRightWidth || defaultTheme.sidebarRightWidth;
     this.tocVisible = data.tocVisible;
     this.rightSidebar = data.rightSidebar ?? null;
+    this.infographicStyle = data.infographicStyle || "modern";
     this.theme = data.theme || Theme.System;
 
     // system theme listeners

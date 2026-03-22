@@ -8,8 +8,24 @@ import type { APIContext } from "@server/types";
 
 const router = new Router();
 
+const STYLE_INSTRUCTIONS: Record<string, string> = {
+  modern:
+    "STYLE: Dark section headers (#1a1a2e), bold typography, pronounced box-shadow, rounded corners (12px), accent color #4361ee. Clean and contemporary.",
+  corporate:
+    "STYLE: Professional blue/grey palette (#003366 headers, #f5f7fa background), formal layout, structured tables where appropriate, conservative typography (Arial). Enterprise look.",
+  minimal:
+    "STYLE: White background, very subtle borders (#e0e0e0), minimal color (one accent #555), generous whitespace, light typography. Simple and clean.",
+  colorful:
+    "STYLE: Vivid, distinct color per section (use a rotation of #e63946, #2a9d8f, #e9c46a, #264653, #f4a261). Playful, high-saturation headers, rounded cards.",
+  dark: "STYLE: Dark background (#0d1117), light text (#e6edf3), neon accent colors per section (#58a6ff, #3fb950, #f78166, #d2a8ff). Sleek dark-mode aesthetic.",
+};
+
 router.post("infographic.create", auth(), async (ctx: APIContext) => {
-  const { id, text } = ctx.request.body as { id: string; text?: string };
+  const { id, text, style } = ctx.request.body as {
+    id: string;
+    text?: string;
+    style?: string;
+  };
   const { user } = ctx.state.auth;
 
   const document = await Document.findByPk(id, { userId: user.id });
@@ -20,7 +36,10 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
     ? text
     : await DocumentHelper.toMarkdown(document!);
 
-  Logger.info("infographic", `Document markdown length: ${markdown.length}, preview: ${markdown.slice(0, 200)}`);
+  Logger.info(
+    "infographic",
+    `Document markdown length: ${markdown.length}, preview: ${markdown.slice(0, 200)}`
+  );
 
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
@@ -28,6 +47,9 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
   }
 
   const model = process.env.OPENROUTER_MODEL ?? "google/gemini-2.0-flash-001";
+
+  const styleKey = style && STYLE_INSTRUCTIONS[style] ? style : "modern";
+  const styleInstruction = STYLE_INSTRUCTIONS[styleKey];
 
   const response = await fetch(
     "https://openrouter.ai/api/v1/chat/completions",
@@ -52,8 +74,9 @@ STRICT RULES:
    - A prominent header showing the document's actual title and a one-sentence summary of the whole document
    - One card per document section (preserve the document's order), each containing: exact section title, 2-3 sentences from that section, and 2-3 of its bullet points
    - A final conclusions card in the document's language summarizing the main takeaways
-4. STYLE: Inline CSS only. No external resources. System fonts (Arial, sans-serif). Each card has a colored header bar, white background, left border accent, rounded corners, box-shadow. Use a rich consistent color palette.
-5. OUTPUT: Return only the raw HTML. No markdown, no \`\`\`html, no explanatory text outside the HTML.
+4. ${styleInstruction}
+5. TECHNICAL: Inline CSS only. No external resources. System fonts (Arial, sans-serif).
+6. OUTPUT: Return only the raw HTML. No markdown, no \`\`\`html, no explanatory text outside the HTML.
 
 DOCUMENT TO CONVERT:
 ${markdown}`,
