@@ -18,7 +18,8 @@ function InfographicPanel() {
   const { t } = useTranslation();
   const match = useRouteMatch<{ documentSlug: string }>();
   const document = documents.get(match.params.documentSlug);
-  const { editor, isEditorInitialized } = useDocumentContext();
+  const { isEditorInitialized } = useDocumentContext();
+  const documentContext = useDocumentContext();
 
   const [html, setHtml] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -32,8 +33,13 @@ function InfographicPanel() {
     setError(null);
     setHtml(null);
     try {
+      // Read editor from context object at call time (editor is not @observable)
+      const text = documentContext.editor
+        ? (documentContext.editor.value() as string)
+        : undefined;
       const res = await client.post("/infographic.create", {
         id: document.id,
+        text,
       });
       setHtml(res.data.html);
     } catch (err) {
