@@ -37,17 +37,21 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
       },
       body: JSON.stringify({
         model,
-        max_tokens: 2000,
+        max_tokens: 4000,
         messages: [
           {
             role: "user",
-            content: `You are an infographic designer. Your only job is to visually represent the document provided below.
+            content: `You are an expert infographic designer. Transform the document below into a rich, detailed, visually compelling HTML infographic.
 
 CRITICAL RULES — follow every one exactly:
-1. LANGUAGE: Detect the language of the document and write ALL text in that same language. If the document is in Spanish, the infographic must be entirely in Spanish.
-2. CONTENT: Every word in the infographic must come from the document. The title must be the document's actual title. The key points must be the document's actual main ideas. Do NOT invent, translate to English, or use generic placeholder text.
-3. STYLE: Use only inline CSS styles. No external fonts, no external CSS, no CDN links. Use system fonts (Arial, sans-serif). Colorful cards, rounded corners.
-4. OUTPUT: Return raw HTML only. No markdown fences, no \`\`\`html, no explanation text before or after.
+1. LANGUAGE: Detect the language of the document and write ALL text in that SAME language. Never switch languages.
+2. CONTENT: Extract real content from the document. Use the actual title, real section headings, real key ideas, real data, real conclusions. Do NOT invent or use generic placeholders.
+3. STRUCTURE: Build a comprehensive infographic with ALL of these sections:
+   - A prominent header with the document title and a one-sentence summary
+   - 4 to 6 thematic sections, each with: a section title, 2-3 sentences of explanation, and 2-3 specific bullet points from the document
+   - A "Conclusiones clave" (or equivalent in the document's language) section at the bottom summarizing 3 takeaways
+4. STYLE: Inline CSS only. No external resources. Use system fonts (Arial, sans-serif). Use a consistent color palette: rich section headers, light card backgrounds, colored accent borders. Cards with rounded corners and subtle shadows. The infographic should be visually dense and informative, not minimal.
+5. OUTPUT: Return raw HTML only. No markdown fences, no \`\`\`html, no explanation text.
 
 DOCUMENT:
 ${markdown}`,
