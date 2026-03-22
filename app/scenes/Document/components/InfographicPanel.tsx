@@ -32,10 +32,8 @@ function InfographicPanel() {
     setError(null);
     setHtml(null);
     try {
-      const text = editor ? (editor.value() as string) : undefined;
       const res = await client.post("/infographic.create", {
         id: document.id,
-        text,
       });
       setHtml(res.data.html);
     } catch (err) {
@@ -45,7 +43,7 @@ function InfographicPanel() {
     } finally {
       setLoading(false);
     }
-  }, [document, editor, t]);
+  }, [document, t]);
 
   React.useEffect(() => {
     if (isEditorInitialized) {
