@@ -45,7 +45,7 @@ function InfographicPanel() {
     } finally {
       setLoading(false);
     }
-  }, [document, t]);
+  }, [document, editor, t]);
 
   React.useEffect(() => {
     if (isEditorInitialized) {

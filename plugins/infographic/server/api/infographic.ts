@@ -41,17 +41,17 @@ router.post("infographic.create", auth(), async (ctx: APIContext) => {
         messages: [
           {
             role: "user",
-            content: `You are an expert infographic designer. Transform the document below into a rich, detailed, visually compelling HTML infographic.
+            content: `You are an expert infographic designer. Your ONLY job is to visually represent the exact content of the document below. You are a designer, not a writer — you do not add, invent, or improve content.
 
-CRITICAL RULES — follow every one exactly:
-1. LANGUAGE: Detect the language of the document and write ALL text in that SAME language. Never switch languages.
-2. CONTENT: Extract real content from the document. Use the actual title, real section headings, real key ideas, real data, real conclusions. Do NOT invent or use generic placeholders.
-3. STRUCTURE: Build a comprehensive infographic with ALL of these sections:
-   - A prominent header with the document title and a one-sentence summary
-   - 4 to 6 thematic sections, each with: a section title, 2-3 sentences of explanation, and 2-3 specific bullet points from the document
-   - A "Conclusiones clave" (or equivalent in the document's language) section at the bottom summarizing 3 takeaways
-4. STYLE: Inline CSS only. No external resources. Use system fonts (Arial, sans-serif). Use a consistent color palette: rich section headers, light card backgrounds, colored accent borders. Cards with rounded corners and subtle shadows. The infographic should be visually dense and informative, not minimal.
-5. OUTPUT: Return raw HTML only. No markdown fences, no \`\`\`html, no explanation text.
+ABSOLUTE RULES:
+1. LANGUAGE: Use the exact same language as the document. Never switch to English or any other language.
+2. CONTENT FIDELITY: Every title, heading, and sentence in the infographic must be a direct quote or close paraphrase of text that actually appears in the document. If a section heading is not in the document, do not use it. If a bullet point is not in the document, do not write it. Do not add facts, tips, or ideas from your own knowledge.
+3. STRUCTURE: Build the infographic with these sections in order:
+   - Header: the document's actual title + one sentence taken verbatim or near-verbatim from the document
+   - One section card per major section/heading found in the document (4-6 cards), each containing: the section's real title, 2-3 sentences copied or closely paraphrased from that section, and 2-3 bullet points that appear in that section
+   - A closing card titled with the word for "Key Conclusions" in the document's language, listing 3 conclusions stated in the document
+4. STYLE: Inline CSS only. No external resources. System fonts (Arial, sans-serif). Consistent color palette with colored section headers, light card backgrounds, accent borders. Rounded corners, subtle shadows. Visually dense.
+5. OUTPUT: Raw HTML only. No markdown fences, no \`\`\`html, no text before or after the HTML.
 
 DOCUMENT:
 ${markdown}`,
