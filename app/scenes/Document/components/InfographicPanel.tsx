@@ -93,8 +93,19 @@ function InfographicPanel() {
   }, [html, document]);
 
   const handleExportPDF = React.useCallback(() => {
-    iframeRef.current?.contentWindow?.print();
-  }, []);
+    if (!html) {
+      return;
+    }
+    const win = window.open("", "_blank");
+    if (!win) {
+      return;
+    }
+    win.document.write(html);
+    win.document.close();
+    win.onload = () => {
+      win.print();
+    };
+  }, [html]);
 
   const handleExportPNG = React.useCallback(async () => {
     if (!html || !document) {
