@@ -132,6 +132,8 @@ function InfographicPanel() {
               options={STYLE_OPTIONS}
               value={ui.infographicStyle}
               onChange={handleStyleChange}
+              label="theme"
+              hideLabel
             />
           </StyleSelectWrapper>
         </StyleBar>
