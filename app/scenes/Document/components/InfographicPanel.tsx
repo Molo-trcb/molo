@@ -8,7 +8,7 @@ import Button from "~/components/Button";
 import { useDocumentContext } from "~/components/DocumentContext";
 import Empty from "~/components/Empty";
 import Flex from "~/components/Flex";
-import InputSelect, { type Item } from "~/components/InputSelect";
+import { InputSelect, type Item } from "~/components/InputSelect";
 import LoadingIndicator from "~/components/LoadingIndicator";
 import useStores from "~/hooks/useStores";
 import { client } from "~/utils/ApiClient";
